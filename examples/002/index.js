@@ -1,7 +1,7 @@
-let c, gl;
-let aLoc = [];
-let uLoc = [];
-let mx = 0.5, my = 0.5;
+var c, gl;
+var aLoc = [];
+var uLoc = [];
+var mx = 0.5, my = 0.5;
 
 function initWebGL() {
     c = document.getElementById("c");
@@ -25,11 +25,11 @@ function mouseMove(e){
 }
 
 function initShaders() {
-    let p = gl.createProgram();
-    let v = document.getElementById("vs").textContent;
-    let f = document.getElementById("fs").textContent;
-    let vs = gl.createShader(gl.VERTEX_SHADER);
-    let fs = gl.createShader(gl.FRAGMENT_SHADER);
+    var p = gl.createProgram();
+    var v = document.getElementById("vs").textContent;
+    var f = document.getElementById("fs").textContent;
+    var vs = gl.createShader(gl.VERTEX_SHADER);
+    var fs = gl.createShader(gl.FRAGMENT_SHADER);
     gl.shaderSource(vs, v);
     gl.shaderSource(fs, f);
     gl.compileShader(vs);
@@ -50,27 +50,27 @@ function initShaders() {
     gl.enableVertexAttribArray(aLoc[1]);
 }
 
-let positionBuffer;
-let coordBuffer;
-let indexBuffer;
-let texture;
+var positionBuffer;
+var coordBuffer;
+var indexBuffer;
+var texture;
 
 function initBuffers() {
-    const positions = [
+    var positions = [
         -1.0,  1.0,  0.0,
          1.0,  1.0,  0.0,
         -1.0, -1.0,  0.0,
          1.0, -1.0,  0.0
     ];
     
-    const textureCoords = [
+    var textureCoords = [
         0.0, 0.0,
         1.0, 0.0,
         0.0, 1.0,
         1.0, 1.0
     ];
     
-    const indices  = [
+    var indices  = [
         0, 1, 2,
         3, 2, 1
     ];
@@ -89,7 +89,7 @@ function initBuffers() {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
     
-    const img = new Image();
+    var img = new Image();
     img.onload = function(){
         texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -105,7 +105,7 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
-let baseTime = +new Date;
+var baseTime = +new Date;
 
 function draw() {
     gl.bindTexture(gl.TEXTURE_2D, texture);
