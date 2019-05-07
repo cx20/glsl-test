@@ -17,14 +17,13 @@ void main()
 </script>
 
 <script id="fs" type="x-shader/x-fragment">
+// forked from iq's "TV CRT Pixels" : https://www.shadertoy.com/view/XsfGDl
 precision mediump float;
 uniform sampler2D texture;
 uniform float time;
 uniform vec2 mouse;
 uniform vec2 resolution;
 varying vec2 vTextureCoord;
-
-// forked from iq's "TV CRT Pixels" : https://www.shadertoy.com/view/XsfGDl
 
 // Created by inigo quilez - iq/2013
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
@@ -36,7 +35,8 @@ void main(void)
     vec2 cor;
 
     cor.x = gl_FragCoord.x / PIXELSIZE;
-    cor.y = - (gl_FragCoord.y + PIXELSIZE * 1.5 * mod(floor(cor.x), 2.0)) / (PIXELSIZE * 3.0);
+    cor.y = (gl_FragCoord.y + PIXELSIZE * 1.5 * mod(floor(cor.x), 2.0)) / (PIXELSIZE * 3.0);
+    cor.y = -1 cor.y;  // TODO: Investigate where to reverse
 
     vec2 ico = floor(cor);
     vec2 fco = fract(cor);
