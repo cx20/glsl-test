@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GLSL Example No.039</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<script id="vs" type="x-shader/x-vertex">
+attribute vec3 position;
+attribute vec2 textureCoord;
+varying   vec2 vTextureCoord;
+void main()
+{
+    vTextureCoord = textureCoord;
+    gl_Position = vec4(position, 1.0);
+}
+</script>
+
+<script id="fs" type="x-shader/x-fragment">
+// forked from BigotedSJW's "centered rotation from" https://www.shadertoy.com/view/4dfXDS
+precision mediump float;
+
+uniform sampler2D texture;
+uniform float time;
+uniform vec2 mouse;
+uniform vec2 resolution;
+varying vec4 vColor;
+varying vec2 vTextureCoord;
+
+void main(void)
+{
+    vec2 center = vec2(resolution.x * 0.5, resolution.y * 0.5)/resolution.yy;
+
+    vec2 uv = gl_FragCoord.xy / resolution.yy - center;
+    vec2 normal = normalize(mouse.xy/resolution.yy - center);
+    
+    //mat2 rotation = mat2(normal.x, normal.y, -normal.y, normal.x);
+    
+    float t = time * 0.75;
+    mat2 rotation = mat2(cos(t), sin(t), -sin(t), cos(t));
+    
+    vec2 coord = uv * rotation + center;
+    
+    gl_FragColor = texture2D(texture,coord);
+
+}
+</script>
+
+<canvas id="c" width="465" height="465"></canvas>
+<script src="index.js"></script>
+</body>
+</html>
