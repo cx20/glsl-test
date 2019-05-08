@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GLSL Example No.050</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<script id="vs" type="x-shader/x-vertex">
+attribute vec3 position;
+attribute vec2 textureCoord;
+varying   vec2 vTextureCoord;
+void main()
+{
+    vTextureCoord = textureCoord;
+    gl_Position = vec4(position, 1.0);
+}
+</script>
+
+<script id="fs" type="x-shader/x-fragment">
+// forked from calmbooks's "GruGru Effect" http://jsdo.it/calmbooks/GruGruEffect
+precision mediump float;
+
+uniform sampler2D texture;
+uniform float time;
+uniform vec2 mouse;
+uniform vec2 resolution;
+varying vec4 vColor;
+varying vec2 vTextureCoord;
+
+void main() {
+    vec4 color = texture2D( texture, vTextureCoord );
+    vec2 vec = ( gl_FragCoord.xy / resolution.xy ) - vec2(0.5, 0.5);
+    
+    float l = length(vec);
+    float r = atan(vec.y, vec.x) ;
+    float t = time * 10.0;
+    float c = 1.0 - sin(l * 70.0 + r + t);
+    gl_FragColor = vec4( color.r * c, color.g * c, color.b * c, color.a );
+}
+</script>
+
+<canvas id="c" width="465" height="465"></canvas>
+<script src="index.js"></script>
+</body>
+</html>
