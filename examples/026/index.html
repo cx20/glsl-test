@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GLSL Example No.026</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<script id="vs" type="x-shader/x-vertex">
+attribute vec3 position;
+attribute vec2 textureCoord;
+varying   vec2 vTextureCoord;
+void main()
+{
+    vTextureCoord = textureCoord;
+    gl_Position = vec4(position, 1.0);
+}
+</script>
+
+<script id="fs" type="x-shader/x-fragment">
+// forked from GLSL Sandbox http://glslsandbox.com/e
+precision mediump float;
+
+uniform sampler2D texture;
+uniform float time;
+uniform vec2 mouse;
+uniform vec2 resolution;
+varying vec4 vColor;
+varying vec2 vTextureCoord;
+
+void main(void) {
+    vec2 uv = vTextureCoord;
+    vec4 texture = texture2D(texture, uv);
+    vec3 destColor = texture.rgb;
+    vec2 position = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
+
+    float color = 0.0;
+    color += sin( position.x * cos( time / 15.0 ) * 80.0 ) + cos( position.y * cos( time / 15.0 ) * 10.0 );
+    color += sin( position.y * sin( time / 10.0 ) * 40.0 ) + cos( position.x * sin( time / 25.0 ) * 40.0 );
+    color += sin( position.x * sin( time / 5.0 ) * 10.0 ) + sin( position.y * sin( time / 35.0 ) * 80.0 );
+    color *= sin( time / 10.0 ) * 0.5;
+    
+    destColor.r *= color;
+    destColor.g *= color * 0.5;
+    destColor.b *= sin( color + time / 3.0 ) * 0.75;
+
+    gl_FragColor = vec4(destColor, 1.0);
+}
+</script>
+
+<canvas id="c" width="465" height="465"></canvas>
+<script src="index.js"></script>
+</body>
+</html>
