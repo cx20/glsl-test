@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GLSL Example No.016</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<script id="vs" type="x-shader/x-vertex">
+attribute vec3 position;
+attribute vec2 textureCoord;
+varying   vec2 vTextureCoord;
+void main()
+{
+    vTextureCoord = textureCoord;
+    gl_Position = vec4(position, 1.0);
+}
+</script>
+
+<script id="fs" type="x-shader/x-fragment">
+precision mediump float;
+
+uniform sampler2D texture;
+uniform float time;
+uniform vec2 mouse;
+uniform vec2 resolution;
+varying vec4 vColor;
+varying vec2 vTextureCoord;
+
+void main( void ) {
+
+    vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
+    vec2 uv = vTextureCoord;
+    vec4 color = texture2D(texture, uv);
+    
+    float mono = (color.r + color.g + color.b) / 3.0;
+
+    if ( mono <= 0.25 ) {
+        gl_FragColor = vec4(1.00, 1.00, 1.00, 1.0);
+    } else if ( mono <= 0.50 ) {
+        gl_FragColor = vec4(0.75, 0.75, 0.75, 1.0);
+    } else if ( mono <= 0.75 ) {
+        gl_FragColor = vec4(0.50, 0.50, 0.50, 1.0);
+    } else {
+        gl_FragColor = vec4(0.25, 0.25, 0.25, 1.0);
+    }
+}
+</script>
+
+<canvas id="c" width="465" height="465"></canvas>
+<script src="index.js"></script>
+</body>
+</html>
