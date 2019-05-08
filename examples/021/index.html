@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>GLSL Example No.020</title>
+  <title>GLSL Example No.021</title>
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -29,7 +29,8 @@ varying vec2 vTextureCoord;
 void main(void){
     vec2 uv = vTextureCoord;
     //uv = floor(uv * 30.0) / 30.0; // mosaic
-    uv = fract(uv * 4.0); // screen division
+    //uv = fract(uv * 4.0); // screen division
+    uv = uv * abs( sin( time ) ) * 8.0; // dynamic screen division
     vec4 color = texture2D(texture, uv);
     gl_FragColor = color;
 }
