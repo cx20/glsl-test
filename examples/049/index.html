@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GLSL Example No.049</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<script id="vs" type="x-shader/x-vertex">
+attribute vec3 position;
+attribute vec2 textureCoord;
+varying   vec2 vTextureCoord;
+void main()
+{
+    vTextureCoord = textureCoord;
+    gl_Position = vec4(position, 1.0);
+}
+</script>
+
+<script id="fs" type="x-shader/x-fragment">
+// forked from alteredq's "Dot screen shader" https://github.com/mrdoob/three.js/blob/master/examples/js/shaders/DotScreenShader.js
+precision mediump float;
+
+uniform sampler2D texture;
+uniform float time;
+uniform vec2 mouse;
+uniform vec2 resolution;
+varying vec4 vColor;
+varying vec2 vTextureCoord;
+
+vec2 center = vec2(0.5, 0.5);
+float angle = 1.57;
+float scale = 1.0;
+vec2 tSize = vec2(400.0, 400.0);
+
+float pattern() {
+    float s = sin( angle ), c = cos( angle );
+    vec2 tex = vTextureCoord * tSize - center;
+    vec2 point = vec2( c * tex.x - s * tex.y, s * tex.x + c * tex.y ) * scale;
+    return ( sin( point.x ) * sin( point.y ) ) * 4.0;
+}
+
+void main() {
+    vec4 color = texture2D( texture, vTextureCoord );
+    float average = ( color.r + color.g + color.b ) / 3.0;
+    gl_FragColor = vec4( vec3( average * 10.0 - 5.0 + pattern() ), color.a );
+}
+</script>
+
+<canvas id="c" width="465" height="465"></canvas>
+<script src="index.js"></script>
+</body>
+</html>
