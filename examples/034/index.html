@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GLSL Example No.034</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<script id="vs" type="x-shader/x-vertex">
+attribute vec3 position;
+attribute vec2 textureCoord;
+varying   vec2 vTextureCoord;
+void main()
+{
+    vTextureCoord = textureCoord;
+    gl_Position = vec4(position, 1.0);
+}
+</script>
+
+<script id="fs" type="x-shader/x-fragment">
+// forked from iq's "Screen space bump mapping" https://www.shadertoy.com/view/ldSGzR
+precision mediump float;
+
+uniform sampler2D texture;
+uniform float time;
+uniform vec2 mouse;
+uniform vec2 resolution;
+varying vec4 vColor;
+varying vec2 vTextureCoord;
+
+// Created by inigo quilez - iq/2013
+// License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+
+void main( void )
+{
+    // normalized coordinates (-1 to 1 vertically)
+    vec2 p = (-resolution.xy + 2.0*gl_FragCoord.xy)/resolution.y;
+
+    // angle of each pixel to the center of the screen
+    float a = atan(p.y,p.x);
+    
+    // modified distance metric. Usually distance = (x&sup2; + y&sup2;)^(1/2). By replacing all the "2" numbers
+    // by 32 in that formula we can create distance metrics other than the euclidean. The higher the
+    // exponent, then more square the metric becomes. More information here:
+    
+    // http://en.wikipedia.org/wiki/Minkowski_distance
+    
+    float r = pow( pow(p.x*p.x,16.0) + pow(p.y*p.y,16.0), 1.0/64.0 );
+    
+    // index texture by angle and radious, and animate along radius    
+    //vec2 uv = vec2( 0.5/r*4.0 + 0.5*time*2.0, a/3.1416*4.0 );
+    vec2 uv = vec2( a/3.1416*2.0 + 0.5, -0.5/r*4.0 - 0.5*time*2.0 );
+
+    // fecth color and darken in the center
+    vec3 col =  texture2D( texture, uv ).xyz * r;
+
+    gl_FragColor = vec4( col, 1.0 );
+}
+</script>
+
+<canvas id="c" width="465" height="465"></canvas>
+<script src="index.js"></script>
+</body>
+</html>
