@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GLSL Example No.012</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<script id="vs" type="x-shader/x-vertex">
+attribute vec3 position;
+attribute vec2 textureCoord;
+varying   vec2 vTextureCoord;
+void main()
+{
+    vTextureCoord = textureCoord;
+    gl_Position = vec4(position, 1.0);
+}
+</script>
+
+<script id="fs" type="x-shader/x-fragment">
+// forked from tacoe's "scanline" https://github.com/tacoe/detroit/blob/master/arthur/scanlines.glsl
+precision mediump float;
+
+uniform sampler2D texture;
+uniform float time;
+uniform vec2 mouse;
+uniform vec2 resolution;
+varying vec4 vColor;
+varying vec2 vTextureCoord;
+
+void main(void) 
+{
+    vec2 q = gl_FragCoord.xy / resolution.xy;
+
+    // subtle zoom in/out 
+    vec2 uv = 0.5 + (q-0.5)*(0.98 + 0.006*sin(0.9*time));
+
+    vec3 oricol = texture2D(texture,vec2(q.x,1.0-q.y)).xyz;
+    vec3 col;
+
+    // start with the source texture and misalign the rays it a bit
+    // TODO animate misalignment upon hit or similar event
+    col.r = texture2D(texture,vec2(uv.x+0.003,-uv.y)).x;
+    col.g = texture2D(texture,vec2(uv.x+0.000,-uv.y)).y;
+    col.b = texture2D(texture,vec2(uv.x-0.003,-uv.y)).z;
+
+    //scanline (last 2 constants are crawl speed and size)
+    //TODO make size dependent on viewport
+    col *= 0.8+0.2*sin(10.0*time+uv.y*900.0);
+
+    gl_FragColor = vec4(col,1.0);
+}
+</script>
+
+<canvas id="c" width="465" height="465"></canvas>
+<script src="index.js"></script>
+</body>
+</html>
