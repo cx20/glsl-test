@@ -28,7 +28,8 @@ varying vec2 vTextureCoord;
 
 void main(void){
     vec2 uv = vTextureCoord;
-    uv = floor(uv * 30.0) / 30.0;
+    //uv = floor(uv * 30.0) / 30.0; // mosaic
+    uv = fract(uv * 4.0); // screen split
     vec4 color = texture2D(texture, uv);
     gl_FragColor = color;
 }
