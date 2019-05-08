@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GLSL Example No.018</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<script id="vs" type="x-shader/x-vertex">
+attribute vec3 position;
+attribute vec2 textureCoord;
+varying   vec2 vTextureCoord;
+void main()
+{
+    vTextureCoord = textureCoord;
+    gl_Position = vec4(position, 1.0);
+}
+</script>
+
+<script id="fs" type="x-shader/x-fragment">
+precision mediump float;
+
+uniform sampler2D texture;
+uniform float time;
+uniform vec2 mouse;
+uniform vec2 resolution;
+varying vec4 vColor;
+varying vec2 vTextureCoord;
+
+const float range = 16.0;
+const float tFrag = 1.0 / 465.0;
+const float nFrag = 1.0 / (range * range);
+
+void main(void){
+    vec4  destColor = vec4(0.0);
+    vec2  fc = vec2(gl_FragCoord.s, 465.0 - gl_FragCoord.t);
+    float offsetX = mod(fc.s, range);
+    float offsetY = mod(fc.t, range);
+    
+    for(float x = 0.0; x < range; x += 1.0){
+        for(float y = 0.0; y < range; y += 1.0){
+            destColor += texture2D(texture, (fc + vec2(x - offsetX, y - offsetY)) * tFrag);
+        }
+    }
+    gl_FragColor = destColor * nFrag;
+}
+</script>
+
+<canvas id="c" width="465" height="465"></canvas>
+<script src="index.js"></script>
+</body>
+</html>
