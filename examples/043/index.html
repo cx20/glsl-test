@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GLSL Example No.043</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<script id="vs" type="x-shader/x-vertex">
+attribute vec3 position;
+attribute vec2 textureCoord;
+varying   vec2 vTextureCoord;
+void main()
+{
+    vTextureCoord = textureCoord;
+    gl_Position = vec4(position, 1.0);
+}
+</script>
+
+<script id="fs" type="x-shader/x-fragment">
+// forked from  2Light's "chromatic aberration test" https://www.shadertoy.com/view/4sS3Dw
+precision mediump float;
+
+uniform sampler2D texture;
+uniform float time;
+uniform vec2 mouse;
+uniform vec2 resolution;
+varying vec4 vColor;
+varying vec2 vTextureCoord;
+
+// Random number used by 2D noise function...
+float random(vec2 ab) 
+{
+    float f = (cos(dot(ab ,vec2(21.9898,78.233))) * 43758.5453);
+    return fract(f);
+}
+
+void main(void) {
+    vec2 uv = gl_FragCoord.xy / resolution.xy;
+    uv.x = - uv.x; // TODO: Investigate where to reverse
+    vec4 color = vec4(0.0);
+
+    float go = sin(time) * 0.01;
+    float go2 = sin(time) * 0.01;
+    //vec2 strenght = vec2(5, 2) * random(uv);
+    vec2 strenght = vec2(5, 2) * random(vec2(sin(time),sin(time)));
+
+    color.r = texture2D(texture, -uv - vec2(go, 0.0) * strenght).r;
+    color.g = texture2D(texture, -uv - vec2(0.005, go2) * strenght).g;
+    color.b = texture2D(texture, -uv).g;
+    color.a = 1.0;
+
+    gl_FragColor = color;
+}
+</script>
+
+<canvas id="c" width="465" height="465"></canvas>
+<script src="index.js"></script>
+</body>
+</html>
