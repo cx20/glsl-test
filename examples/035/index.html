@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GLSL Example No.035</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<script id="vs" type="x-shader/x-vertex">
+attribute vec3 position;
+attribute vec2 textureCoord;
+varying   vec2 vTextureCoord;
+void main()
+{
+    vTextureCoord = textureCoord;
+    gl_Position = vec4(position, 1.0);
+}
+</script>
+
+<script id="fs" type="x-shader/x-fragment">
+// forked from nuclear's "Classic tunnel effect" https://www.shadertoy.com/view/XssGDr
+precision mediump float;
+
+uniform sampler2D texture;
+uniform float time;
+uniform vec2 mouse;
+uniform vec2 resolution;
+varying vec4 vColor;
+varying vec2 vTextureCoord;
+
+#define M_PI    3.141593
+
+float psin(float x)
+{
+    return sin(x) * 0.5 + 0.5;
+}
+
+vec2 tunnel(in vec2 pix, out float z)
+{
+    float aspect = resolution.x / resolution.y;
+    vec2 center = vec2(cos(time * 0.15), 0.0);
+    vec2 pt = (pix * 2.0 - 1.0) * vec2(aspect, 1.0);
+    
+    vec2 dir = pt - center;
+    
+    float angle;
+    angle = atan(dir.y, dir.x) / M_PI;
+    float dist = sqrt(dot(dir, dir));
+    z = 2.0 / dist;    
+
+    return vec2(angle * 2.0 + time * 0.25, z + time * 0.5);
+}
+
+void main(void)
+{
+    vec3 color = vec3(1.0, 1.0, 1.0);
+    
+    vec2 tc = gl_FragCoord.xy / resolution.xy;
+    
+    float z;
+    vec2 tun = tunnel(tc, z);
+    
+    color = vec3(clamp(2.0 / z, 0.0, 1.0)) * texture2D(texture, -tun).xyz;
+
+    gl_FragColor.xyz = color;
+    gl_FragColor.w = 1.0;
+}
+</script>
+
+<canvas id="c" width="465" height="465"></canvas>
+<script src="index.js"></script>
+</body>
+</html>
