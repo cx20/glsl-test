@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GLSL Example No.040</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<script id="vs" type="x-shader/x-vertex">
+attribute vec3 position;
+attribute vec2 textureCoord;
+varying   vec2 vTextureCoord;
+void main()
+{
+    vTextureCoord = textureCoord;
+    gl_Position = vec4(position, 1.0);
+}
+</script>
+
+<script id="fs" type="x-shader/x-fragment">
+// forked from  racarate's "[SH2014] hello world" https://www.shadertoy.com/view/4d23Dt
+precision mediump float;
+
+uniform sampler2D texture;
+uniform float time;
+uniform vec2 mouse;
+uniform vec2 resolution;
+varying vec4 vColor;
+varying vec2 vTextureCoord;
+
+void main(void) 
+{
+    vec2 uv = gl_FragCoord.xy / resolution.xy;
+    vec4 tex = texture2D(texture, -uv);
+    vec4 texsound = texture2D(texture, vec2(0.01, 0.25));
+    vec2 center = vec2(0.5 + 0.5 * sin(time), 0.5);
+    float dist = 1.0 - smoothstep(0.35, 0.45, length(center - uv));
+    //gl_FragColor = vec4(dist, 0.0, 0.0, 1.0 );
+    gl_FragColor = vec4(dist * tex.rgb, 1.0);
+}
+</script>
+
+<canvas id="c" width="465" height="465"></canvas>
+<script src="index.js"></script>
+</body>
+</html>
