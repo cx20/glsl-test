@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GLSL Example No.052</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<script id="vs" type="x-shader/x-vertex">
+attribute vec3 position;
+attribute vec2 textureCoord;
+varying   vec2 vTextureCoord;
+void main()
+{
+    vTextureCoord = textureCoord;
+    gl_Position = vec4(position, 1.0);
+}
+</script>
+
+<script id="fs" type="x-shader/x-fragment">
+// forked from ICS Nohara's "8 standard image processing of shaders that you want to suppress with WebGL" http://ics-web.jp/lab/archives/5535
+precision mediump float;
+
+uniform sampler2D texture;
+uniform vec2 resolution;
+varying vec2 vTextureCoord;
+
+float rand(vec2 co) {
+    float a = fract(dot(co, vec2(2.067390879775102, 12.451168662908249))) - 0.5;
+    float s = a * (6.182785114200511 + a * a * (-38.026512460676566 + a * a * 53.392573080032137));
+    float t = fract(s * 43758.5453);
+    return t;
+}
+
+void main() {
+    float radius = 5.0;
+
+    float x = (vTextureCoord.x * resolution.x) + rand(vTextureCoord) * radius * 2.0 - radius;
+    float y = (vTextureCoord.y * resolution.y) + rand(vec2(vTextureCoord.y,vTextureCoord.x)) * radius * 2.0 - radius;
+
+    vec4 textureColor = texture2D(texture, vec2( x, y ) / resolution );
+    gl_FragColor = textureColor;
+}
+</script>
+
+<canvas id="c" width="465" height="465"></canvas>
+<script src="index.js"></script>
+</body>
+</html>
