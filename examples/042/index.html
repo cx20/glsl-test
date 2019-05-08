@@ -36,6 +36,7 @@ float random(vec2 ab)
 
 void main(void) {
     vec2 uv = gl_FragCoord.xy / resolution.xy;
+    uv.x = - uv.x; // TODO: Investigate where to reverse
     vec4 color = vec4(0.0);
 
     float go = sin(time) * 0.01;
