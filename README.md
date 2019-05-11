@@ -1,7 +1,7 @@
 # glsl-test
 Test of GLSL
 
-|No  |Screenshot                    |Zoom                               |Example                                                          |Original or reference URL                                       |
+|No  |Screenshot                    |Screenshot(Zoom)                   |Example                                                          |Original or reference URL                                       |
 |:--:|:----------------------------:|:---------------------------------:|:---------------------------------------------------------------:|:---------------------------------------------------------------|
 |  1 |![](assets/screenshot/001.jpg)|![](assets/screenshot/001_zoom.jpg)|[Link](https://cx20.github.io/glsl-test/examples/001/index.html) |http://jsdo.it/cx20/3yw3 |
 |  2 |![](assets/screenshot/002.jpg)|![](assets/screenshot/002_zoom.jpg)|[Link](https://cx20.github.io/glsl-test/examples/002/index.html) |https://www.shadertoy.com/view/XsfGDl |
