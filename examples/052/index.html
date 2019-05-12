@@ -18,7 +18,8 @@ void main()
 
 <script id="fs" type="x-shader/x-fragment">
 // forked from ICS Nohara's "8 standard image processing of shaders that you want to suppress with WebGL" http://ics-web.jp/lab/archives/5535
-precision mediump float;
+//precision mediump float;
+precision highp float; // Fix to work on iPhone
 
 uniform sampler2D texture;
 uniform vec2 resolution;
