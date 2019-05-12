@@ -18,7 +18,8 @@ void main()
 
 <script id="fs" type="x-shader/x-fragment">
 // forked from movAX13h's "Ascii Art" https://www.shadertoy.com/view/lssGDj
-precision mediump float;
+//precision mediump float;
+precision highp float; // Fix to work on iPhone
 
 uniform sampler2D texture;
 uniform float time;

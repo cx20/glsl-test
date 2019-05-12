@@ -18,7 +18,8 @@ void main()
 
 <script id="fs" type="x-shader/x-fragment">
 // forked from  FabriceNeyret2's "lightbulb screen" https://www.shadertoy.com/view/MdsXRB
-precision mediump float;
+//precision mediump float;
+precision highp float; // Fix to work on iPhone
 
 uniform sampler2D texture;
 uniform float time;
