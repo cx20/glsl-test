@@ -18,7 +18,8 @@ void main()
 
 <script id="fs" type="x-shader/x-fragment">
 // forked from iq's "Screen space bump mapping" https://www.shadertoy.com/view/ldSGzR
-precision mediump float;
+//precision mediump float;
+precision highp float; // Fix to work on iPhone
 
 uniform sampler2D texture;
 uniform float time;
