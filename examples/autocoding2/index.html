@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GLSL Auto Coding Demo</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<!-- codemirror.js -->
+<script src="../../libs/codemirror.js"></script>
+<!-- glsl.js -->
+<script src="../../libs/glsl.js"></script>
+
+<script id="fs" type="x-shader/x-fragment">
+precision mediump float;
+
+uniform vec2 resolution;
+uniform float time;
+uniform sampler2D texture;
+varying vec2 vTextureCoord;
+
+void main(void){
+    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+}
+</script>
+
+<script id="vs" type="x-shader/x-vertex">
+attribute vec3 position;
+attribute vec2 textureCoord;
+varying   vec2 vTextureCoord;
+
+void main(void){
+    vTextureCoord = textureCoord;
+    gl_Position   = vec4(position, 1.0);
+}
+</script>
+
+<canvas id="canvas"></canvas>
+<textarea id="code" name="code"></textarea>
+
+<script src="index.js"></script>
+</body>
+</html>
